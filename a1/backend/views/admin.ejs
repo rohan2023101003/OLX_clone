@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+</head>
+<body>
+
+    <h1>ADMIN PAGE</h1>
+    <a href="/api/login">logout</a>
+    <a href="/api/signup">Signup</a>
+   
+
+    <h2>All Users</h2>
+    <ul>
+        <% users.forEach((user) => { %>
+            <li><%= user.name %> - <%= user.email %></li>
+        <% }) %>
+    </ul>
+
+</body>
+</html>

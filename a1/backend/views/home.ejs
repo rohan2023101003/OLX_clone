@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>HOME</h1>
+    <% if (user) { %>
+        <h1>hello, <%= user.name %></h1>
+        <h2>Email: <%= user.email %></h2>
+        <form action="/user/logout" method="get">
+            <button type="submit">Logout</button>
+        </form>
+        <% if (user.role === 'admin') { %>
+            <form action="/user/admin" method="get">
+                <button type="submit">All Users</button>
+            </form>
+        <% } %>
+    <% } else { %>
+        <h1>hello, guest</h1>
+    <% } %>
+
+</body>
+</html>
