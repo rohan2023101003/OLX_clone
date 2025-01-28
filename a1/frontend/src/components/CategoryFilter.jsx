@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './CategoryFilter.css'
 function CategoryFilter({ categories, selectedCategories, onCategoryChange }) {
   const handleCategoryChange = (event) => {
     const { value, checked } = event.target;

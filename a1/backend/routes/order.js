@@ -8,7 +8,9 @@ const {
     getSuccessfulOrdersForSeller,
     getProcessingOrdersForSeller,
     getOrderById,
-    verifyOtpAndCloseTransaction
+    verifyOtpAndCloseTransaction,
+    getCancelledOrdersBySeller,
+    getCancelledOrdersOfBuyer
 } = require('../controllers/order');
 
 router
@@ -38,5 +40,13 @@ router
 router
     .route('/verifyOtp')
     .post(verifyOtpAndCloseTransaction);
+
+router
+    .route('/cancelledOrdersSeller')
+    .get(getCancelledOrdersBySeller);
+
+router
+    .route('/cancelledOrdersBuyer')
+    .get(getCancelledOrdersOfBuyer);
 
 module.exports = router;

@@ -34,6 +34,7 @@ function Delivery() {
       const response = await axios.post('/order/verifyOtp', { orderId: selectedOrderId, otp }, { withCredentials: true });
       alert(response.data.message);
       setOrders(orders.filter(order => order._id !== selectedOrderId));
+      // await fetchOrders();
       setShowModal(false);
     } catch (error) {
       console.error('Error closing transaction:', error);

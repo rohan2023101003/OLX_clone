@@ -5,10 +5,14 @@ import Tab from 'react-bootstrap/Tab';
 import Card from 'react-bootstrap/Card';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
+
 function Orders() {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [boughtItems, setBoughtItems] = useState([]);
   const [soldItems, setSoldItems] = useState([]);
+  const [cancelledOrdersSeller, setCancelledOrdersSeller] = useState([]);
+  const [cancelledOrdersBuyer, setCancelledOrdersBuyer] = useState([]);
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -18,10 +22,14 @@ function Orders() {
         const pendingResponse = await axios.get('/order/processingOrdersBuyer', { withCredentials: true });
         const boughtResponse = await axios.get('/order/boughtOrders', { withCredentials: true });
         const soldResponse = await axios.get('/order/soldOrders', { withCredentials: true });
-
+        const cancelledResponseSeller = await axios.get('/order/cancelledOrdersSeller', { withCredentials: true }); //orders are autometically cancelled from seller side once a transaction of that item is succesful
+        const cancelledResponseBuyer = await axios.get('/order/cancelledOrdersBuyer', { withCredentials: true });
         setPendingOrders(pendingResponse.data.orders);
         setBoughtItems(boughtResponse.data.orders);
         setSoldItems(soldResponse.data.orders);
+        setCancelledOrdersSeller(cancelledResponseSeller.data.orders);
+        setCancelledOrdersBuyer(cancelledResponseBuyer.data.orders);
+
         setLoading(false);
       } catch (error) {
         setError('Error fetching orders');
@@ -117,6 +125,38 @@ function Orders() {
                 <Card.Text>Item: {order.itemName}</Card.Text>
                 <Card.Text>Price: Rs.{order.itemPrice}</Card.Text>
                 <Card.Text>Buyer: {order.buyerEmail}</Card.Text>
+              </Card.Body>
+            </Card>
+          ))
+        )}
+      </Tab>
+      <Tab eventKey="cancelledSeller" title="Cancelled Orders (Seller)">
+        {cancelledOrdersSeller.length === 0 ? (
+          <p>No cancelled orders</p>
+        ) : (
+          cancelledOrdersSeller.map(order => (
+            <Card key={order._id} style={{ margin: '1rem' }}>
+              <Card.Body>
+                <Card.Title>Order ID: {order._id}</Card.Title>
+                <Card.Text>Item: {order.itemName}</Card.Text>
+                <Card.Text>Price: Rs.{order.itemPrice}</Card.Text>
+                <Card.Text>Buyer: {order.buyerEmail}</Card.Text>
+              </Card.Body>
+            </Card>
+          ))
+        )}
+      </Tab>
+      <Tab eventKey="cancelledBuyer" title="Cancelled Orders (Buyer)">
+        {cancelledOrdersBuyer.length === 0 ? (
+          <p>No cancelled orders</p>
+        ) : (
+          cancelledOrdersBuyer.map(order => (
+            <Card key={order._id} style={{ margin: '1rem' }}>
+              <Card.Body>
+                <Card.Title>Order ID: {order._id}</Card.Title>
+                <Card.Text>Item: {order.itemName}</Card.Text>
+                <Card.Text>Price: Rs.{order.itemPrice}</Card.Text>
+                <Card.Text>Seller: {order.sellerEmail}</Card.Text>
               </Card.Body>
             </Card>
           ))

@@ -114,6 +114,26 @@ async function getProcessingOrdersForSeller(req, res) {
     }
 }
 
+async function getCancelledOrdersBySeller(req, res) {
+  try {
+    const orders = await Order.find({ sellerEmail: req.user.email, status: 'cancelled' });
+    return res.status(200).json({ orders });
+  } catch (error) {
+    console.error('Error fetching cancelled orders for seller:', error);
+    return res.status(500).json({ error: 'Internal Server Error: Could not fetch orders' });
+  }
+}
+
+async function getCancelledOrdersOfBuyer(req, res) {
+  try {
+    const orders = await Order.find({ buyerEmail: req.user.email, status: 'cancelled' });
+    return res.status(200).json({ orders });
+  } catch (error) {
+    console.error('Error fetching cancelled orders for buyer:', error);
+    return res.status(500).json({ error: 'Internal Server Error: Could not fetch orders' });
+  }
+}
+
 async function getOrderById(req, res) {
     const { orderId } = req.body;
    console.log(orderId);
@@ -158,6 +178,14 @@ async function getOrderById(req, res) {
         { $pull: { items: { itemId: itemId } } }
         );
 
+
+          
+      // Cancel all other orders with the same item
+      await Order.updateMany(
+        { productId: itemId, status: { $ne: 'successful' } },
+        { $set: { status: 'cancelled' } }
+      );
+
       return res.status(200).json({ message: 'Transaction closed successfully' });
     } catch (error) {
       console.error('Error closing transaction:', error);
@@ -173,5 +201,7 @@ module.exports = {
     getSuccessfulOrdersForSeller,
     getProcessingOrdersForSeller,
     getOrderById,
-    verifyOtpAndCloseTransaction
+    verifyOtpAndCloseTransaction,
+    getCancelledOrdersBySeller,
+    getCancelledOrdersOfBuyer
 };
