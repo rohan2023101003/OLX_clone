@@ -25,7 +25,7 @@ const itemRoutes = require('./routes/item');
 const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/order');
 
-const url = 'mongodb+srv://rohankumar992p:kcHD9XbCIDScsSik@cluster0.ijxmq.mongodb.net/a1_dass';
+const url =your mongodb url here
 connectMongoDB(url);
 
 
